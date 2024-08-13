@@ -24,4 +24,23 @@ const deleteUserById = async (req, res) => {
   }
 };
 
-export { getAllusers, deleteUserById };
+const registerUser = async (req, res) => {
+  try {
+    const user = await prisma.user.create({
+      data: {
+        fullname: req.body.name,
+        adress: req.body.adress,
+        email: req.body.email,
+        nik: req.body.nik,
+        password: req.body.password,
+        role: req.body.role,
+      },
+    });
+
+    res.json(user).status(200);
+  } catch (error) {
+    res.json({ message: error }).status(500);
+  }
+};
+
+export { getAllusers, deleteUserById, registerUser };

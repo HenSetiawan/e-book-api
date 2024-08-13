@@ -4,7 +4,7 @@ import userRoute from "./src/routers/user.js";
 import "dotenv/config";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 6000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
