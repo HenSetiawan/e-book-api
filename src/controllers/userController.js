@@ -12,13 +12,26 @@ const getAllusers = async (req, res) => {
 
 const deleteUserById = async (req, res) => {
   const userId = req.params.id;
+  console.log(userId);
   try {
-    const deletedUser = await prisma.user.delete({
+    const user = await prisma.user.findUnique({
       where: {
-        id: userId,
+        id: parseInt(userId),
       },
     });
-    res.json(deletedUser).status(200);
+    if (!user) {
+      res
+        .status(404)
+        .json({ data: user, message: `user with id ${userId} is not found` });
+      return;
+    }
+
+    const deleteUser = await prisma.user.delete({
+      where: {
+        id: parseInt(userId),
+      },
+    });
+    res.json({ data: deleteUser, message: "success" }).status(200);
   } catch (error) {
     res.json({ message: error }).status(500);
   }
