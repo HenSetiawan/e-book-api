@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { hashString } from "../utils/hash.js";
 const prisma = new PrismaClient();
 
 const getAllusers = async (req, res) => {
@@ -24,9 +25,7 @@ const getUserById = async (req, res) => {
         .json({ data: user, message: `user with id ${userId} is not found` });
       return;
     } else {
-      res
-        .status(200)
-        .json({ data: user, message: `success` });
+      res.status(200).json({ data: user, message: `success` });
     }
   } catch (error) {}
 };
@@ -65,7 +64,7 @@ const registerUser = async (req, res) => {
         address: req.body.address,
         email: req.body.email,
         nik: req.body.nik,
-        password: req.body.password,
+        password: await hashString(req.body.password),
         role: req.body.role,
       },
     });
