@@ -4,15 +4,14 @@ const prisma = new PrismaClient();
 const getAllusers = async (req, res) => {
   try {
     const users = await prisma.user.findMany();
-    res.json(users).status(200);
+    res.status(200).json({data:users, message:"success"});
   } catch (error) {
-    res.json({ message: error }).status(500);
+    res.status(500).json({ message: error });
   }
 };
 
 const deleteUserById = async (req, res) => {
   const userId = req.params.id;
-  console.log(userId);
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -31,9 +30,9 @@ const deleteUserById = async (req, res) => {
         id: parseInt(userId),
       },
     });
-    res.json({ data: deleteUser, message: "success" }).status(200);
+    res.status(200).json({ data: deleteUser, message: "success" });
   } catch (error) {
-    res.json({ message: error }).status(500);
+    res.status(500).json({ message: error });
   }
 };
 
@@ -41,8 +40,8 @@ const registerUser = async (req, res) => {
   try {
     const user = await prisma.user.create({
       data: {
-        fullname: req.body.name,
-        adress: req.body.adress,
+        fullname: req.body.fullname,
+        address: req.body.address,
         email: req.body.email,
         nik: req.body.nik,
         password: req.body.password,
@@ -50,9 +49,9 @@ const registerUser = async (req, res) => {
       },
     });
 
-    res.json(user).status(200);
+    res.status(200).json({data:user, message:"success"});
   } catch (error) {
-    res.json({ message: error }).status(500);
+    res.status(500).json({ message: error });
   }
 };
 
