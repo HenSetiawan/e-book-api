@@ -1,5 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import userRoute from "./src/routers/user.js";
 import "dotenv/config";
 
 const app = express();
@@ -9,9 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use("/", (req, res) => {
-  res.status(200).json({ message: "Hello Hend" });
-});
+app.use('/',userRoute);
 
 app.listen(PORT, () => {
   console.log("server running on port", PORT);

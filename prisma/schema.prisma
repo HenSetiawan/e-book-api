@@ -96,4 +96,3 @@ model Loan {
   user      User @relation(fields: [userId], references: [id])
   penalties Penalty[]
 }
-
