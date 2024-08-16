@@ -8,7 +8,7 @@ The relational of the database and diagram design.
 - One to Many (users to loans): one user can have many loans
 - One to Many (users to pinalties): one user can have many pinalties
 
-![image](https://github.com/HenSetiawan/books-loan-express/blob/main/docs/books-loans-erd.png)
+![image](https://github.com/HenSetiawan/books-loan-express/blob/main/docs/book-loan.png)
 
 ## Use Case
  - Auth
