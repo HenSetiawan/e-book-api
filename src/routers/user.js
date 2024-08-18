@@ -3,7 +3,8 @@ import {
   getAllusers,
   deleteUserById,
   registerUser,
-  getUserById
+  getUserById,
+  updateUserById,
 } from "../controllers/userController.js";
 const userRoute = express.Router();
 
@@ -77,7 +78,7 @@ userRoute.delete("/user/:id", deleteUserById);
 
 /**
  * @swagger
- * /api/v1/register:
+ * /api/v1/user:
  *   post:
  *     summary: Register a new user
  *     description: Register a new user with the provided details
@@ -123,5 +124,61 @@ userRoute.delete("/user/:id", deleteUserById);
  *         description: Server error
  */
 userRoute.post("/user", registerUser);
+
+/**
+ * @swagger
+ * /api/v1/user/{userId} :
+ *   patch:
+ *     summary: update user data
+ *     description: update specific data user by id
+ *     tags:
+ *       - User
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the user to delete
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fullname:
+ *                 type: string
+ *                 description: user full name
+ *                 example: hendy
+ *               email:
+ *                 type: string
+ *                 description: email
+ *                 example: hendy@app.com
+ *               nik:
+ *                 type: string
+ *                 description: nik user
+ *                 example: 12345678912345678912
+ *               address:
+ *                 type: string
+ *                 description: user address
+ *                 example: Jl. macan hitam, jakarta barat
+ *               role:
+ *                 type: string
+ *                 description: user role
+ *                 example: admin
+ *               password:
+ *                 type: string
+ *                 description: user password
+ *                 example: secret
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server error
+ */
+userRoute.patch("/user/:id", updateUserById);
 
 export default userRoute;
