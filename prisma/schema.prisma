@@ -20,19 +20,36 @@ model User {
   nik       Int
   email     String   @unique
   password  String
-  role      String
+  roleId    Int
   createdAt DateTime @default(now())
 
+  role Role @relation(fields: [roleId], references: [id])
   penalties Penalty[]
   loans     Loan[]
+}
+
+model Role {
+  id   Int      @id @default(autoincrement())
+  name String
+
+  users User[]
+}
+
+model Nationality {
+  id Int @id @default(autoincrement())
+  name String
+
+  authors Author[]
 }
 
 model Author {
   id          Int      @id @default(autoincrement())
   name        String
-  nationality String
+  nationalityId Int
   biography   String
   books       Book[]
+
+  nationality Nationality @relation(fields: [nationalityId], references: [id])
 }
 
 model Book {
