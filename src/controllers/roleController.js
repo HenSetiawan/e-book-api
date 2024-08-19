@@ -23,4 +23,30 @@ const createNewRole = async (req, res) => {
   }
 };
 
-export { getAllRoles, createNewRole };
+const deleteRoleById = async (req, res) => {
+  const roleId = req.params.id;
+  try {
+    const role = await prisma.role.findUnique({
+      where: {
+        id: parseInt(roleId),
+      },
+    });
+    if (!role) {
+      res
+        .status(404)
+        .json({ data: role, message: `role with id ${roleId} is not found` });
+      return;
+    }
+
+    const deletedRole = await prisma.role.delete({
+      where: {
+        id: parseInt(roleId),
+      },
+    });
+    res.status(200).json({ data: deletedRole, message: "success" });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
+
+export { getAllRoles, createNewRole, deleteRoleById };

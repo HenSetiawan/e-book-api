@@ -1,6 +1,6 @@
 import express from "express";
 const roleRoute = express.Router();
-import { getAllRoles, createNewRole } from "../controllers/roleController.js";
+import { getAllRoles, createNewRole, deleteRoleById } from "../controllers/roleController.js";
 
 /**
  * @swagger
@@ -48,5 +48,31 @@ roleRoute.get("/roles", getAllRoles);
  *         description: Server error
  */
 roleRoute.post("/role", createNewRole);
+
+
+/**
+ * @swagger
+ * /api/v1/role/{roleId}:
+ *   delete:
+ *     summary: Delete role
+ *     description: Delete a role by the id
+ *     tags:
+ *       - Roles
+ *     parameters:
+ *       - in: path
+ *         name: roleId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the role to delete
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+roleRoute.delete("/role/:id", deleteRoleById)
 
 export default roleRoute;
