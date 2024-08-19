@@ -1,6 +1,31 @@
 import express from "express";
 const roleRoute = express.Router();
-import { getAllRoles, createNewRole, deleteRoleById, updateRoleById } from "../controllers/roleController.js";
+import { getAllRoles, createNewRole, deleteRoleById, updateRoleById, getRoleById } from "../controllers/roleController.js";
+
+/**
+ * @swagger
+ * /api/v1/role/{roleId}:
+ *   get:
+ *     summary: Retrieve role data by id
+ *     description: Retrieve the data role from database by id
+ *     tags:
+ *       - Roles
+ *     parameters:
+ *       - in: path
+ *         name: roleId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The unique identifier of the role.
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+roleRoute.get("/role/:id", getRoleById);
 
 /**
  * @swagger

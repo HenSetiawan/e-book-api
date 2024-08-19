@@ -1,6 +1,25 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
+const getRoleById = async (req, res) => {
+    const roleId = req.params.id;
+    try {
+      const role = await prisma.role.findUnique({
+        where: {
+          id: parseInt(roleId),
+        },
+      });
+      if (!role) {
+        res
+          .status(404)
+          .json({ data: role, message: `role with id ${roleId} is not found` });
+        return;
+      } else {
+        res.status(200).json({ data: role, message: `success` });
+      }
+    } catch (error) {}
+  };
+
 const getAllRoles = async (req, res) => {
   try {
     const roles = await prisma.role.findMany();
@@ -75,4 +94,4 @@ const updateRoleById = async (req, res) => {
     }
   };
 
-export { getAllRoles, createNewRole, deleteRoleById, updateRoleById };
+export { getAllRoles, createNewRole, deleteRoleById, updateRoleById, getRoleById };
