@@ -4,7 +4,11 @@ const prisma = new PrismaClient();
 
 const getAllusers = async (req, res) => {
   try {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      include: {
+        role: true,
+      },
+    });
     res.status(200).json({ data: users, message: "success" });
   } catch (error) {
     res.status(500).json({ message: error });
@@ -65,7 +69,7 @@ const registerUser = async (req, res) => {
         email: req.body.email,
         nik: parseInt(req.body.nik),
         password: await hashString(req.body.password),
-        roleId:parseInt(req.body.roleId),
+        roleId: parseInt(req.body.roleId),
       },
     });
 
