@@ -63,9 +63,9 @@ const registerUser = async (req, res) => {
         fullname: req.body.fullname,
         address: req.body.address,
         email: req.body.email,
-        nik: req.body.nik,
+        nik: parseInt(req.body.nik),
         password: await hashString(req.body.password),
-        role: req.body.role,
+        roleId:parseInt(req.body.roleId),
       },
     });
 
