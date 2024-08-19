@@ -22,6 +22,9 @@ const getUserById = async (req, res) => {
       where: {
         id: parseInt(userId),
       },
+      include:{
+        role:true
+      }
     });
     if (!user) {
       res
