@@ -1,6 +1,6 @@
 import express from "express";
 const roleRoute = express.Router();
-import { getAllRoles, createNewRole, deleteRoleById } from "../controllers/roleController.js";
+import { getAllRoles, createNewRole, deleteRoleById, updateRoleById } from "../controllers/roleController.js";
 
 /**
  * @swagger
@@ -74,5 +74,41 @@ roleRoute.post("/role", createNewRole);
  *         description: Server error
  */
 roleRoute.delete("/role/:id", deleteRoleById)
+
+/**
+ * @swagger
+ * /api/v1/role/{roleId} :
+ *   patch:
+ *     summary: update user role
+ *     description: update specific data role by id
+ *     tags:
+ *       - Roles
+ *     parameters:
+ *       - in: path
+ *         name: roleId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the user to delete
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: role name
+ *                 example: admin
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server error
+ */
+roleRoute.patch("/role/:id", updateRoleById)
 
 export default roleRoute;
