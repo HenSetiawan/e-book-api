@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import userRoute from "./src/routers/user.js";
 import roleRoute from "./src/routers/role.js";
+import authRoute from "./src/routers/auth.js";
 import { swaggerUi, specs } from "./swagger.js";
 import "dotenv/config";
 
@@ -14,6 +15,7 @@ app.use(cookieParser());
 
 app.use("/api/v1", userRoute);
 app.use("/api/v1", roleRoute)
+app.use("/api/v1", authRoute)
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.listen(PORT, () => {
