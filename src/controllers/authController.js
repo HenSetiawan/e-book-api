@@ -43,21 +43,63 @@ const login = async (req, res) => {
           httpOnly: true,
           secure: true,
         });
-        res
+        return res
           .status(200)
           .json({ status: "success", data: userWithEmail, token: accessToken });
       } else {
-        res.status(400).json({ message: `username or password is wrong` });
-        return;
+        return res
+          .status(400)
+          .json({ message: `username or password is wrong` });
       }
     } else {
-      res.status(400).json({ message: `username or password is wrong` });
-      return;
+      return res.status(400).json({ message: `username or password is wrong` });
     }
   } catch (error) {
-    res.status(500).json({ message: `something went wrong`, error: error });
-    return;
+    return res
+      .status(500)
+      .json({ message: `something went wrong`, error: error });
   }
 };
 
-export { login };
+const refreshToken = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (refreshToken) {
+    jwt.verify(refreshToken, process.env.JWT_REFRESH, async (err, decode) => {
+      if (err) {
+        return res
+          .status(403)
+          .json({ message: "refresh token is not valid", status: "failed" });
+      } else {
+        const userData = await prisma.user.findUnique({
+          where: {
+            id: decode.userData.id,
+          },
+          include: {
+            role: true,
+          },
+        });
+
+        if (userData != null) {
+          const accessToken = jwt.sign(userData, process.env.JWT_KEY, {
+            expiresIn: "1h",
+          });
+          return res.status(200).json({
+            status: "success",
+            data: userData,
+            token: accessToken,
+          });
+        } else {
+          return res
+            .status(403)
+            .json({ message: "refresh token is not valid", status: "failed" });
+        }
+      }
+    });
+  } else {
+    return res
+      .status(401)
+      .json({ message: "refresh token missing", status: "failed" });
+  }
+};
+
+export { login, refreshToken };
