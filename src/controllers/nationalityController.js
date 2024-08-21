@@ -10,4 +10,17 @@ const getAllNationality = async (req, res) => {
   }
 };
 
-export { getAllNationality };
+const createNewNationallity = async (req, res) => {
+    try {
+      const nationality = await prisma.nationality.create({
+        data: {
+          name: req.body.name,
+        },
+      });
+      res.status(201).json({ data: nationality, message: "success" });
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  };
+
+export { getAllNationality, createNewNationallity };
