@@ -6,6 +6,7 @@ import {
   getUserById,
   updateUserById,
 } from "../controllers/userController.js";
+import isAuth from "../middleware/isAuth.js";
 const userRoute = express.Router();
 
 /**
@@ -24,7 +25,7 @@ const userRoute = express.Router();
  *       500:
  *         description: Server error
  */
-userRoute.get("/users", getAllusers);
+userRoute.get("/users", isAuth(["admin"]), getAllusers);
 
 /**
  * @swagger
@@ -49,7 +50,7 @@ userRoute.get("/users", getAllusers);
  *       500:
  *         description: Server error
  */
-userRoute.get("/user/:id", getUserById);
+userRoute.get("/user/:id", isAuth(["admin"]), getUserById);
 
 /**
  * @swagger
@@ -74,7 +75,7 @@ userRoute.get("/user/:id", getUserById);
  *       500:
  *         description: Server error
  */
-userRoute.delete("/user/:id", deleteUserById);
+userRoute.delete("/user/:id", isAuth(["admin"]), deleteUserById);
 
 /**
  * @swagger
@@ -123,7 +124,7 @@ userRoute.delete("/user/:id", deleteUserById);
  *       500:
  *         description: Server error
  */
-userRoute.post("/user", registerUser);
+userRoute.post("/user", isAuth(["admin"]), registerUser);
 
 /**
  * @swagger
@@ -179,6 +180,6 @@ userRoute.post("/user", registerUser);
  *       500:
  *         description: Server error
  */
-userRoute.patch("/user/:id", updateUserById);
+userRoute.patch("/user/:id", isAuth(["admin"]), updateUserById);
 
 export default userRoute;

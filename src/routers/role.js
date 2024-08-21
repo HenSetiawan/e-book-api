@@ -1,5 +1,6 @@
 import express from "express";
 const roleRoute = express.Router();
+import isAuth from "../middleware/isAuth.js";
 import { getAllRoles, createNewRole, deleteRoleById, updateRoleById, getRoleById } from "../controllers/roleController.js";
 
 /**
@@ -10,6 +11,8 @@ import { getAllRoles, createNewRole, deleteRoleById, updateRoleById, getRoleById
  *     description: Retrieve the data role from database by id
  *     tags:
  *       - Roles
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: roleId
@@ -25,7 +28,7 @@ import { getAllRoles, createNewRole, deleteRoleById, updateRoleById, getRoleById
  *       500:
  *         description: Server error
  */
-roleRoute.get("/role/:id", getRoleById);
+roleRoute.get("/role/:id",isAuth(["admin"]), getRoleById);
 
 /**
  * @swagger
@@ -35,6 +38,8 @@ roleRoute.get("/role/:id", getRoleById);
  *     description: Retrieve all the data roles from database
  *     tags:
  *       - Roles
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: OK
@@ -43,7 +48,7 @@ roleRoute.get("/role/:id", getRoleById);
  *       500:
  *         description: Server error
  */
-roleRoute.get("/roles", getAllRoles);
+roleRoute.get("/roles",isAuth(["admin"]), getAllRoles);
 
 /**
  * @swagger
@@ -53,6 +58,8 @@ roleRoute.get("/roles", getAllRoles);
  *     description: create new role data
  *     tags:
  *       - Roles
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -72,7 +79,7 @@ roleRoute.get("/roles", getAllRoles);
  *       500:
  *         description: Server error
  */
-roleRoute.post("/role", createNewRole);
+roleRoute.post("/role",isAuth(["admin"]), createNewRole);
 
 
 /**
@@ -83,6 +90,8 @@ roleRoute.post("/role", createNewRole);
  *     description: Delete a role by the id
  *     tags:
  *       - Roles
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: roleId
@@ -98,7 +107,7 @@ roleRoute.post("/role", createNewRole);
  *       500:
  *         description: Server error
  */
-roleRoute.delete("/role/:id", deleteRoleById)
+roleRoute.delete("/role/:id",isAuth(["admin"]), deleteRoleById)
 
 /**
  * @swagger
@@ -108,6 +117,8 @@ roleRoute.delete("/role/:id", deleteRoleById)
  *     description: update specific data role by id
  *     tags:
  *       - Roles
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: roleId
@@ -134,6 +145,6 @@ roleRoute.delete("/role/:id", deleteRoleById)
  *       500:
  *         description: Server error
  */
-roleRoute.patch("/role/:id", updateRoleById)
+roleRoute.patch("/role/:id",isAuth(["admin"]), updateRoleById)
 
 export default roleRoute;
