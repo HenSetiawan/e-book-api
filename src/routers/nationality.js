@@ -1,7 +1,7 @@
 import express from "express";
 const nationalityRoute = express.Router();
 import isAuth from "../middleware/isAuth.js";
-import { getAllNationality, createNewNationallity } from "../controllers/nationalityController.js";
+import { getAllNationality, createNewNationallity, deleteNationalityById } from "../controllers/nationalityController.js";
 
 /**
  * @swagger
@@ -54,5 +54,32 @@ nationalityRoute.get("/nationalities", isAuth(["admin"]), getAllNationality);
  *         description: Server error
  */
 nationalityRoute.post("/nationality",isAuth(["admin"]), createNewNationallity);
+
+/**
+ * @swagger
+ * /api/v1/nationality/{nationalityId}:
+ *   delete:
+ *     summary: Delete nationality
+ *     description: Delete a nationality by the id
+ *     tags:
+ *       - Nationality
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: nationalityId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the nationality to delete
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+nationalityRoute.delete("/nationality/:id",isAuth(["admin"]), deleteNationalityById)
 
 export default nationalityRoute;
