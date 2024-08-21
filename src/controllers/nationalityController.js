@@ -69,4 +69,4 @@ const deleteNationalityById = async (req, res) => {
   }
 };
 
-export { getAllNationality, createNewNationallity, deleteNationalityById };
+export { getAllNationality, createNewNationallity, deleteNationalityById, getNationalityById };

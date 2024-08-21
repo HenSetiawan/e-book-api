@@ -1,7 +1,33 @@
 import express from "express";
 const nationalityRoute = express.Router();
 import isAuth from "../middleware/isAuth.js";
-import { getAllNationality, createNewNationallity, deleteNationalityById } from "../controllers/nationalityController.js";
+import { getAllNationality, createNewNationallity, deleteNationalityById, getNationalityById } from "../controllers/nationalityController.js";
+/**
+ * @swagger
+ * /api/v1/nationality/{nationalityId}:
+ *   get:
+ *     summary: Retrieve nationality data by id
+ *     description: Retrieve the data nationality from database by id
+ *     tags:
+ *       - Nationality
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: nationalityId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The unique identifier of the nationality.
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+nationalityRoute.get("/nationality/:id",isAuth(["admin"]), getNationalityById);
 
 /**
  * @swagger
