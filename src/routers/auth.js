@@ -1,10 +1,10 @@
 import express from "express";
 const authRoute = express.Router();
-import { login, refreshToken } from "../controllers/authController.js";
+import { login, refreshToken, logout } from "../controllers/authController.js";
 
 /**
  * @swagger
- * /auth/login:
+ * /api/v1/login:
  *   post:
  *     summary: Login a user
  *     description: Authenticate a user and return a JWT token
@@ -39,7 +39,7 @@ authRoute.post("/login", login);
 
 /**
  * @swagger
- * /token:
+ * /api/v1/token:
  *   get:
  *     summary: Refresh JWT token
  *     description: Obtain a new JWT token using a refresh token
@@ -65,5 +65,28 @@ authRoute.post("/login", login);
  *         description: Server error
  */
 authRoute.get("/token", refreshToken);
+
+
+/**
+ * @swagger
+ * /api/v1/logout:
+ *   post:
+ *     summary: Logout a user
+ *     description: remove token from cookie
+ *     tags:
+ *          - Auth
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server error
+ */
+authRoute.post("/logout", logout);
 
 export default authRoute;

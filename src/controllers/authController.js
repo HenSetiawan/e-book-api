@@ -102,4 +102,13 @@ const refreshToken = async (req, res) => {
   }
 };
 
-export { login, refreshToken };
+const logout = async (req, res) => {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: true,
+  });
+
+  return res.status(200).json({ message: "Logged out and cookie cleared" });
+};
+
+export { login, refreshToken, logout };
