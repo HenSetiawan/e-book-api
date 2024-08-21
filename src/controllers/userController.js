@@ -9,9 +9,9 @@ const getAllusers = async (req, res) => {
         role: true,
       },
     });
-    res.status(200).json({ data: users, message: "success" });
+  return res.status(200).json({ data: users, message: "success" });
   } catch (error) {
-    res.status(500).json({ message: error });
+   return res.status(500).json({ message: error });
   }
 };
 
@@ -22,19 +22,20 @@ const getUserById = async (req, res) => {
       where: {
         id: parseInt(userId),
       },
-      include:{
-        role:true
-      }
+      include: {
+        role: true,
+      },
     });
     if (!user) {
-      res
+      return res
         .status(404)
         .json({ data: user, message: `user with id ${userId} is not found` });
-      return;
     } else {
-      res.status(200).json({ data: user, message: `success` });
+      return res.status(200).json({ data: user, message: `success` });
     }
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
 };
 
 const deleteUserById = async (req, res) => {
@@ -46,10 +47,9 @@ const deleteUserById = async (req, res) => {
       },
     });
     if (!user) {
-      res
+    return res
         .status(404)
         .json({ data: user, message: `user with id ${userId} is not found` });
-      return;
     }
 
     const deleteUser = await prisma.user.delete({
@@ -57,9 +57,9 @@ const deleteUserById = async (req, res) => {
         id: parseInt(userId),
       },
     });
-    res.status(200).json({ data: deleteUser, message: "success" });
+  return  res.status(200).json({ data: deleteUser, message: "success" });
   } catch (error) {
-    res.status(500).json({ message: error });
+  return  res.status(500).json({ message: error });
   }
 };
 
@@ -76,9 +76,9 @@ const registerUser = async (req, res) => {
       },
     });
 
-    res.status(201).json({ data: user, message: "success" });
+   return res.status(201).json({ data: user, message: "success" });
   } catch (error) {
-    res.status(500).json({ message: error });
+   return res.status(500).json({ message: error });
   }
 };
 
@@ -91,10 +91,9 @@ const updateUserById = async (req, res) => {
       },
     });
     if (!user) {
-      res
+     return res
         .status(404)
         .json({ data: user, message: `user with id ${userId} is not found` });
-      return;
     }
     const updatedUser = await prisma.user.update({
       where: {
@@ -102,9 +101,9 @@ const updateUserById = async (req, res) => {
       },
       data: req.body,
     });
-    res.status(200).json({ data: updatedUser, message: "success" });
+   return res.status(200).json({ data: updatedUser, message: "success" });
   } catch (error) {
-    res.status(500).json({ message: error });
+   return res.status(500).json({ message: error });
   }
 };
 
