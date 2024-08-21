@@ -1,7 +1,7 @@
 import express from "express";
 const nationalityRoute = express.Router();
 import isAuth from "../middleware/isAuth.js";
-import { getAllNationality, createNewNationallity, deleteNationalityById, getNationalityById } from "../controllers/nationalityController.js";
+import { getAllNationality, createNewNationallity, deleteNationalityById, getNationalityById, updateNationalityById } from "../controllers/nationalityController.js";
 /**
  * @swagger
  * /api/v1/nationality/{nationalityId}:
@@ -107,5 +107,43 @@ nationalityRoute.post("/nationality",isAuth(["admin"]), createNewNationallity);
  *         description: Server error
  */
 nationalityRoute.delete("/nationality/:id",isAuth(["admin"]), deleteNationalityById)
+
+/**
+ * @swagger
+ * /api/v1/nationality/{nationalityId} :
+ *   patch:
+ *     summary: update user nationality
+ *     description: update specific data nationality by id
+ *     tags:
+ *       - Nationality
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: nationalityId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the nationality
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: nationality name
+ *                 example: Palestine
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server error
+ */
+nationalityRoute.patch("/nationality/:id",isAuth(["admin"]), updateNationalityById)
 
 export default nationalityRoute;

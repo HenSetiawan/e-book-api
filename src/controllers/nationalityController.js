@@ -69,4 +69,29 @@ const deleteNationalityById = async (req, res) => {
   }
 };
 
-export { getAllNationality, createNewNationallity, deleteNationalityById, getNationalityById };
+const updateNationalityById = async (req, res) => {
+    const nationalityId = req.params.id;
+    try {
+      const nationality = await prisma.nationality.findUnique({
+        where: {
+          id: parseInt(nationalityId),
+        },
+      });
+      if (!nationality) {
+        return res
+          .status(404)
+          .json({ data: nationality, message: `nationality with id ${nationalityId} is not found` });
+      }
+      const updatedNationality = await prisma.nationality.update({
+        where: {
+          id: parseInt(nationalityId),
+        },
+        data: req.body,
+      });
+      return res.status(200).json({ data: updatedNationality, message: "success" });
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  };
+
+export { getAllNationality, createNewNationallity, deleteNationalityById, getNationalityById, updateNationalityById };

@@ -125,7 +125,7 @@ roleRoute.delete("/role/:id",isAuth(["admin"]), deleteRoleById)
  *         required: true
  *         schema:
  *           type: integer
- *         description: The ID of the user to delete
+ *         description: The ID of the user to update
  *     requestBody:
  *       required: false
  *       content:
