@@ -17,7 +17,7 @@ const isAuth = (roles = []) => {
           error: err,
         });
       } else {
-        const userRole = user.role.name.toLowerCase();
+        const userRole = user.userData.role.name.toLowerCase();
         if (!roles.includes(userRole)) {
           return res.status(403).json({ message: "Forbidden" });
         } else {
