@@ -36,4 +36,19 @@ const getAllAuthor = async (req, res) => {
   }
 };
 
-export { getAuthorById, getAllAuthor };
+const createNewAuthor = async (req, res) => {
+  try {
+    const author = await prisma.author.create({
+      data: {
+        name: req.body.name,
+        nationalityId: parseInt(req.body.nationalityId),
+        biography: req.body.biography,
+      },
+    });
+    res.status(201).json({ data: author, message: "success" });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
+
+export { getAuthorById, getAllAuthor, createNewAuthor };

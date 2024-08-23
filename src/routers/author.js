@@ -4,6 +4,7 @@ import isAuth from "../middleware/isAuth.js";
 import {
   getAuthorById,
   getAllAuthor,
+  createNewAuthor,
 } from "../controllers/authorController.js";
 
 /**
@@ -53,5 +54,44 @@ authorRoute.get("/author/:id", isAuth(["admin", "user"]), getAuthorById);
  */
 
 authorRoute.get("/authors", isAuth(["admin", "user"]), getAllAuthor);
+
+/**
+ * @swagger
+ * /api/v1/author:
+ *   post:
+ *     summary: create new author
+ *     description: create new author data
+ *     tags:
+ *       - Author
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: author name
+ *                 example: Indonesia
+ *               nationalityId:
+ *                 type: integer
+ *                 description: id nationality
+ *                 example: 10
+ *               biography:
+ *                 type: string
+ *                 description: author bio
+ *                 example: good book author
+ *     responses:
+ *       201:
+ *         description: Created
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server error
+ */
+authorRoute.post("/author", isAuth(["admin"]), createNewAuthor);
 
 export default authorRoute;
