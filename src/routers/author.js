@@ -5,6 +5,7 @@ import {
   getAuthorById,
   getAllAuthor,
   createNewAuthor,
+  deleteAuthorById
 } from "../controllers/authorController.js";
 
 /**
@@ -93,5 +94,33 @@ authorRoute.get("/authors", isAuth(["admin", "user"]), getAllAuthor);
  *         description: Server error
  */
 authorRoute.post("/author", isAuth(["admin"]), createNewAuthor);
+
+/**
+ * @swagger
+ * /api/v1/author/{authorId}:
+ *   delete:
+ *     summary: Delete author
+ *     description: Delete a author by the id
+ *     tags:
+ *       - Author
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: authorId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the author to delete
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+
+authorRoute.delete("/author/:id", isAuth(["admin"]), deleteAuthorById);
 
 export default authorRoute;
