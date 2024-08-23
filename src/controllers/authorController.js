@@ -23,5 +23,17 @@ const getAuthorById = async (req, res) => {
   }
 };
 
+const getAllAuthor = async (req, res) => {
+  try {
+    const authors = await prisma.author.findMany({
+      include: {
+        nationality: true,
+      },
+    });
+    res.status(200).json({ data: authors, message: "success" });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
 
-export { getAuthorById };
+export { getAuthorById, getAllAuthor };
