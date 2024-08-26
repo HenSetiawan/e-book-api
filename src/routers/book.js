@@ -5,6 +5,7 @@ import {
   getBookById,
   getAllBook,
   createNewBook,
+  deleteBookById,
 } from "../controllers/bookController.js";
 
 /**
@@ -102,5 +103,33 @@ bookRoute.get("/books", isAuth(["admin", "user"]), getAllBook);
  */
 
 bookRoute.post("/book", isAuth(["admin"]), createNewBook);
+
+/**
+ * @swagger
+ * /api/v1/book/{bookId}:
+ *   delete:
+ *     summary: Delete book
+ *     description: Delete a book by the id
+ *     tags:
+ *       - Book
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: bookId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the book to delete
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+
+bookRoute.delete('/book/:id', isAuth(['admin', 'user']), deleteBookById)
 
 export default bookRoute;

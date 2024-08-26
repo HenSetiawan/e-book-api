@@ -47,7 +47,6 @@ const createNewLanguage = async (req, res) => {
 
 const deleteLanguageById = async (req, res) => {
   const languageId = req.params.id;
-  console.log(languageId);
   try {
     const language = await prisma.language.findUnique({
       where: {
