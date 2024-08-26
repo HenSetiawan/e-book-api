@@ -23,4 +23,13 @@ const getLanguageById = async (req, res) => {
   }
 };
 
-export { getLanguageById };
+const getAllLanguage = async (req, res) => {
+  try {
+    const languages = await prisma.language.findMany();
+    res.status(200).json({ data: languages, message: "success" });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
+
+export { getLanguageById, getAllLanguage };

@@ -1,7 +1,10 @@
 import express from "express";
 const languageRoute = express.Router();
 import isAuth from "../middleware/isAuth.js";
-import { getLanguageById } from "../controllers/LanguageController.js";
+import {
+  getLanguageById,
+  getAllLanguage,
+} from "../controllers/LanguageController.js";
 
 /**
  * @swagger
@@ -28,6 +31,26 @@ import { getLanguageById } from "../controllers/LanguageController.js";
  *       500:
  *         description: Server error
  */
-languageRoute.get('/language/:id', isAuth(['admin','user']), getLanguageById)
+languageRoute.get("/language/:id", isAuth(["admin", "user"]), getLanguageById);
 
-export default languageRoute
+/**
+ * @swagger
+ * /api/v1/languages:
+ *   get:
+ *     summary: Retrieve all language data
+ *     description: Retrieve all the data language from database
+ *     tags:
+ *       - Language
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+languageRoute.get("/languages", isAuth(["admin", "user"]), getAllLanguage);
+
+export default languageRoute;
