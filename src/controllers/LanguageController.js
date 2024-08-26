@@ -2,18 +2,18 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const getLanguageById = async (req, res) => {
-  const getLanguageId = req.params.id;
+  const languageId = req.params.id;
   try {
     const language = await prisma.language.findUnique({
       where: {
-        id: parseInt(getLanguageId),
+        id: parseInt(languageId),
       },
     });
 
     if (!language) {
       return res.status(404).json({
         data: language,
-        message: `language with id ${getLanguageId} is not found`,
+        message: `language with id ${languageId} is not found`,
       });
     } else {
       return res.status(200).json({ data: language, message: `success` });
@@ -45,4 +45,32 @@ const createNewLanguage = async (req, res) => {
   }
 };
 
-export { getLanguageById, getAllLanguage, createNewLanguage };
+const deleteLanguageById = async (req, res) => {
+  const languageId = req.params.id;
+  console.log(languageId)
+  try {
+    const language = await prisma.language.findUnique({
+      where: {
+        id: parseInt(languageId),
+      },
+    });
+
+    if (!language) {
+      return res.status(404).json({
+        data: language,
+        message: `language with id ${languageId} is not found`,
+      });
+    }
+
+    const deletedLanguage = await prisma.language.delete({
+      where: {
+        id: parseInt(languageId),
+      },
+    });
+    return res.status(200).json({ data: deletedLanguage, message: "success" });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+};
+
+export { getLanguageById, getAllLanguage, createNewLanguage, deleteLanguageById };

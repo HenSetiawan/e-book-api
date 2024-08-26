@@ -80,7 +80,7 @@ const refreshToken = async (req, res) => {
         });
 
         if (userData != null) {
-          const accessToken = jwt.sign(userData, process.env.JWT_KEY, {
+          const accessToken = jwt.sign({userData}, process.env.JWT_KEY, {
             expiresIn: "1h",
           });
           return res.status(200).json({

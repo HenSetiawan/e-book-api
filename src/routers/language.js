@@ -5,6 +5,7 @@ import {
   getLanguageById,
   getAllLanguage,
   createNewLanguage,
+  deleteLanguageById,
 } from "../controllers/LanguageController.js";
 
 /**
@@ -85,5 +86,36 @@ languageRoute.get("/languages", isAuth(["admin", "user"]), getAllLanguage);
  */
 
 languageRoute.post("/language", isAuth(["admin"]), createNewLanguage);
+
+/**
+ * @swagger
+ * /api/v1/language/{languageId}:
+ *   delete:
+ *     summary: Delete language
+ *     description: Delete a language by the id
+ *     tags:
+ *       - Language
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: languageId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the language to delete
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+languageRoute.delete(
+  "/language/:id",
+  isAuth(["admin"]),
+  deleteLanguageById
+);
 
 export default languageRoute;
