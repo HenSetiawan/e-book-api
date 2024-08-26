@@ -4,6 +4,7 @@ import isAuth from "../middleware/isAuth.js";
 import {
   getLanguageById,
   getAllLanguage,
+  createNewLanguage,
 } from "../controllers/LanguageController.js";
 
 /**
@@ -52,5 +53,37 @@ languageRoute.get("/language/:id", isAuth(["admin", "user"]), getLanguageById);
  *         description: Server error
  */
 languageRoute.get("/languages", isAuth(["admin", "user"]), getAllLanguage);
+
+/**
+ * @swagger
+ * /api/v1/language:
+ *   post:
+ *     summary: create new language
+ *     description: create new language data
+ *     tags:
+ *       - Language
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: language name
+ *                 example: Arab
+ *     responses:
+ *       201:
+ *         description: Created
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server error
+ */
+
+languageRoute.post("/language", isAuth(["admin"]), createNewLanguage);
 
 export default languageRoute;
