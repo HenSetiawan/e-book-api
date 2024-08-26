@@ -8,6 +8,10 @@ const getBookById = async (req, res) => {
       where: {
         id: parseInt(bookId),
       },
+      include:{
+        author:true,
+        language:true
+      }
     });
 
     if (!book) {
@@ -25,7 +29,12 @@ const getBookById = async (req, res) => {
 
 const getAllBook = async (req, res) => {
   try {
-    const books = await prisma.book.findMany();
+    const books = await prisma.book.findMany({
+        include:{
+            author:true,
+            language:true
+        }
+    });
     return res.status(200).json({ data: books, message: "success" });
   } catch (error) {
     return res.status(500).json({ message: error });
