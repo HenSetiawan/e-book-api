@@ -5,7 +5,8 @@ import {
   getAuthorById,
   getAllAuthor,
   createNewAuthor,
-  deleteAuthorById
+  deleteAuthorById,
+  updateAuthorById,
 } from "../controllers/authorController.js";
 
 /**
@@ -122,5 +123,52 @@ authorRoute.post("/author", isAuth(["admin"]), createNewAuthor);
  */
 
 authorRoute.delete("/author/:id", isAuth(["admin"]), deleteAuthorById);
+
+/**
+ * @swagger
+ * /api/v1/author/{authorId} :
+ *   patch:
+ *     summary: update user author
+ *     description: update specific data author by id
+ *     tags:
+ *       - Author
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: authorId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the author
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: author name
+ *                 example: Hendy
+ *               nationalityId:
+ *                 type: integer
+ *                 description: author nationality id
+ *                 example: 1
+ *               biography:
+ *                 type: string
+ *                 description: author bio
+ *                 example: born in Indonesia
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server error
+ */
+
+authorRoute.patch("/author/:id", isAuth("admin"), updateAuthorById);
 
 export default authorRoute;

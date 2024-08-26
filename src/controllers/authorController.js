@@ -41,7 +41,7 @@ const createNewAuthor = async (req, res) => {
     const author = await prisma.author.create({
       data: {
         name: req.body.name,
-        authorId: parseInt(req.body.nationalityId),
+        nationalityId: parseInt(req.body.nationalityId),
         biography: req.body.biography,
       },
     });
@@ -78,4 +78,29 @@ const deleteAuthorById = async (req, res) => {
   }
 };
 
-export { getAuthorById, getAllAuthor, createNewAuthor, deleteAuthorById };
+const updateAuthorById = async (req, res) => {
+    const authorId = req.params.id;
+    try {
+      const author = await prisma.author.findUnique({
+        where: {
+          id: parseInt(authorId),
+        },
+      });
+      if (!author) {
+        return res
+          .status(404)
+          .json({ data: author, message: `author with id ${authorId} is not found` });
+      }
+      const updatedAuthor = await prisma.author.update({
+        where: {
+          id: parseInt(authorId),
+        },
+        data: req.body,
+      });
+      return res.status(200).json({ data: updatedAuthor, message: "success" });
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  };
+
+export { getAuthorById, getAllAuthor, createNewAuthor, deleteAuthorById, updateAuthorById };
