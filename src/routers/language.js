@@ -6,7 +6,8 @@ import {
   getAllLanguage,
   createNewLanguage,
   deleteLanguageById,
-} from "../controllers/LanguageController.js";
+  updateLanguageById,
+} from "../controllers/languageController.js";
 
 /**
  * @swagger
@@ -112,10 +113,45 @@ languageRoute.post("/language", isAuth(["admin"]), createNewLanguage);
  *       500:
  *         description: Server error
  */
-languageRoute.delete(
-  "/language/:id",
-  isAuth(["admin"]),
-  deleteLanguageById
-);
+languageRoute.delete("/language/:id", isAuth(["admin"]), deleteLanguageById);
+
+/**
+ * @swagger
+ * /api/v1/language/{languageId} :
+ *   patch:
+ *     summary: update user language
+ *     description: update specific data language by id
+ *     tags:
+ *       - Language
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: languageId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the language
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: language name
+ *                 example: French
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server error
+ */
+
+languageRoute.patch("/language/:id", isAuth(["admin"]), updateLanguageById);
 
 export default languageRoute;

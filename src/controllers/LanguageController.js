@@ -47,7 +47,7 @@ const createNewLanguage = async (req, res) => {
 
 const deleteLanguageById = async (req, res) => {
   const languageId = req.params.id;
-  console.log(languageId)
+  console.log(languageId);
   try {
     const language = await prisma.language.findUnique({
       where: {
@@ -73,4 +73,40 @@ const deleteLanguageById = async (req, res) => {
   }
 };
 
-export { getLanguageById, getAllLanguage, createNewLanguage, deleteLanguageById };
+const updateLanguageById = async (req, res) => {
+  const languageId = req.params.id;
+  try {
+    const language = await prisma.language.findUnique({
+      where: {
+        id: parseInt(languageId),
+      },
+    });
+    if (!language) {
+      return res
+        .status(404)
+        .json({
+          data: language,
+          message: `language with id ${languageId} is not found`,
+        });
+    }
+    const updatedLanguage = await prisma.author.update({
+      where: {
+        id: parseInt(languageId),
+      },
+      data: {
+        name: req.body.name,
+      },
+    });
+    return res.status(200).json({ data: updatedLanguage, message: "success" });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+};
+
+export {
+  getLanguageById,
+  getAllLanguage,
+  createNewLanguage,
+  deleteLanguageById,
+  updateLanguageById
+};
