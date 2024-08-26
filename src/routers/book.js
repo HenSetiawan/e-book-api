@@ -1,8 +1,7 @@
 import express from "express";
 const bookRoute = express.Router();
 import isAuth from "../middleware/isAuth.js";
-import { getBookById } from "../controllers/bookController.js";
-
+import { getBookById, getAllBook } from "../controllers/bookController.js";
 
 /**
  * @swagger
@@ -30,5 +29,25 @@ import { getBookById } from "../controllers/bookController.js";
  *         description: Server error
  */
 bookRoute.get("/book/:id", isAuth(["admin", "user"]), getBookById);
+
+/**
+ * @swagger
+ * /api/v1/books:
+ *   get:
+ *     summary: Retrieve all book data
+ *     description: Retrieve all the data book from database
+ *     tags:
+ *       - Book
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+bookRoute.get("/books", isAuth(["admin", "user"]), getAllBook);
 
 export default bookRoute;

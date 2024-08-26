@@ -23,4 +23,13 @@ const getBookById = async (req, res) => {
   }
 };
 
-export { getBookById };
+const getAllBook = async (req, res) => {
+  try {
+    const books = await prisma.book.findMany();
+    return res.status(200).json({ data: books, message: "success" });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+};
+
+export { getBookById, getAllBook };
