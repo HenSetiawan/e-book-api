@@ -77,4 +77,36 @@ const deleteBookById = async (req, res) => {
   }
 };
 
-export { getBookById, getAllBook, createNewBook, deleteBookById };
+const updateBookById = async (req, res) => {
+  const bookId = req.params.id;
+  try {
+    const book = await prisma.book.findUnique({
+      where: {
+        id: parseInt(bookId),
+      },
+    });
+    if (!book) {
+      return res.status(404).json({
+        data: book,
+        message: `book with id ${bookId} is not found`,
+      });
+    }
+    const updatedBook = await prisma.book.update({
+      where: {
+        id: parseInt(bookId),
+      },
+      data: req.body,
+    });
+    return res.status(200).json({ data: updatedBook, message: "success" });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+};
+
+export {
+  getBookById,
+  getAllBook,
+  createNewBook,
+  deleteBookById,
+  updateBookById,
+};
