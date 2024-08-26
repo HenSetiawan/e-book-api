@@ -32,4 +32,22 @@ const getAllBook = async (req, res) => {
   }
 };
 
-export { getBookById, getAllBook };
+const createNewBook = async (req, res) => {
+  try {
+    const book = await prisma.book.create({
+      data: {
+        title: req.body.title,
+        isbn: req.body.isbn,
+        authorId: parseInt(req.body.authorId),
+        languageId: parseInt(req.body.languageId),
+        synopsys: req.body.synopsys,
+        stock: 1,
+      },
+    });
+    return res.status(201).json({ data: book, message: "success" });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+};
+
+export { getBookById, getAllBook, createNewBook };
