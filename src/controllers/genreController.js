@@ -73,4 +73,30 @@ const deleteGenreById = async (req, res) => {
   }
 };
 
-export { getGenreById, getAllGenre, createNewGenre, deleteGenreById };
+const updateGenreById = async (req, res) => {
+  const genreId = req.params.id;
+  try {
+    const genre = await prisma.genre.findUnique({
+      where: {
+        id: parseInt(genreId),
+      },
+    });
+    if (!genre) {
+      return res.status(404).json({
+        data: genre,
+        message: `genre with id ${genreId} is not found`,
+      });
+    }
+    const updatedGenre = await prisma.genre.update({
+      where: {
+        id: parseInt(genreId),
+      },
+      data: req.body,
+    });
+    return res.status(200).json({ data: updatedGenre, message: "success" });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+};
+
+export { getGenreById, getAllGenre, createNewGenre, deleteGenreById, updateGenreById };

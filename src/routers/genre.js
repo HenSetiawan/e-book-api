@@ -5,6 +5,7 @@ import {
   getAllGenre,
   createNewGenre,
   deleteGenreById,
+  updateGenreById,
 } from "../controllers/genreController.js";
 import isAuth from "../middleware/isAuth.js";
 
@@ -116,5 +117,47 @@ genreRoute.post("/genre", isAuth(["admin", "user"]), createNewGenre);
  *         description: Server error
  */
 genreRoute.delete("/genre/:id", isAuth(["admin", "user"]), deleteGenreById);
+
+/**
+ * @swagger
+ * /api/v1/genre/{genreId} :
+ *   patch:
+ *     summary: update genre
+ *     description: update specific data genre by id
+ *     tags:
+ *       - Genre
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: genreId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the genre
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: genre name
+ *                 example: Horor
+ *               description:
+ *                 type: string
+ *                 description: genre details
+ *                 example: horror and brutal
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server error
+ */
+genreRoute.patch("/genre/:id", isAuth(["admin", "user"]), updateGenreById);
 
 export default genreRoute;
