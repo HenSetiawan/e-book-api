@@ -1,6 +1,6 @@
 import express from "express";
 const genreRoute = express.Router();
-import { getGenreById, getAllGenre } from "../controllers/genreController.js";
+import { getGenreById, getAllGenre, createNewGenre } from "../controllers/genreController.js";
 import isAuth from "../middleware/isAuth.js";
 
 /**
@@ -49,5 +49,40 @@ genreRoute.get("/genre/:id", isAuth(["admin", "user"]), getGenreById);
  *         description: Server error
  */
 genreRoute.get('/genres',isAuth(['admin','user']), getAllGenre)
+
+/**
+ * @swagger
+ * /api/v1/genre:
+ *   post:
+ *     summary: create new genre
+ *     description: create new genre data
+ *     tags:
+ *       - Genre
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: genre name
+ *                 example: Action
+ *               description:
+ *                 type: string
+ *                 description: genre details
+ *                 example: action horror is horror
+ *     responses:
+ *       201:
+ *         description: Created
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server error
+ */
+genreRoute.post('/genre', isAuth(['admin','user']), createNewGenre)
 
 export default genreRoute;

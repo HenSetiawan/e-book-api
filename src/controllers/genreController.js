@@ -32,4 +32,18 @@ const getAllGenre = async (req, res) => {
   }
 };
 
-export { getGenreById, getAllGenre };
+const createNewGenre = async (req, res) => {
+    try {
+      const genre = await prisma.genre.create({
+        data: {
+          name: req.body.name,
+          description: req.body.description,
+        },
+      });
+      return res.status(201).json({ data: genre, message: "success" });
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  };
+
+export { getGenreById, getAllGenre, createNewGenre };
