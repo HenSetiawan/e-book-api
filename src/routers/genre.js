@@ -1,8 +1,7 @@
 import express from "express";
 const genreRoute = express.Router();
-import { getGenreById } from "../controllers/genreController.js";
+import { getGenreById, getAllGenre } from "../controllers/genreController.js";
 import isAuth from "../middleware/isAuth.js";
-
 
 /**
  * @swagger
@@ -30,5 +29,25 @@ import isAuth from "../middleware/isAuth.js";
  *         description: Server error
  */
 genreRoute.get("/genre/:id", isAuth(["admin", "user"]), getGenreById);
+
+/**
+ * @swagger
+ * /api/v1/genres:
+ *   get:
+ *     summary: Retrieve all genre data
+ *     description: Retrieve all the data genre from database
+ *     tags:
+ *       - Genre
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+genreRoute.get('/genres',isAuth(['admin','user']), getAllGenre)
 
 export default genreRoute;

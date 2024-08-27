@@ -23,4 +23,13 @@ const getGenreById = async (req, res) => {
   }
 };
 
-export { getGenreById };
+const getAllGenre = async (req, res) => {
+  try {
+    const genres = await prisma.genre.findMany();
+    return res.status(200).json({ data: genres, message: "success" });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+};
+
+export { getGenreById, getAllGenre };
