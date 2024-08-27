@@ -1,6 +1,11 @@
 import express from "express";
 const genreRoute = express.Router();
-import { getGenreById, getAllGenre, createNewGenre } from "../controllers/genreController.js";
+import {
+  getGenreById,
+  getAllGenre,
+  createNewGenre,
+  deleteGenreById,
+} from "../controllers/genreController.js";
 import isAuth from "../middleware/isAuth.js";
 
 /**
@@ -48,7 +53,7 @@ genreRoute.get("/genre/:id", isAuth(["admin", "user"]), getGenreById);
  *       500:
  *         description: Server error
  */
-genreRoute.get('/genres',isAuth(['admin','user']), getAllGenre)
+genreRoute.get("/genres", isAuth(["admin", "user"]), getAllGenre);
 
 /**
  * @swagger
@@ -83,6 +88,33 @@ genreRoute.get('/genres',isAuth(['admin','user']), getAllGenre)
  *       500:
  *         description: Server error
  */
-genreRoute.post('/genre', isAuth(['admin','user']), createNewGenre)
+genreRoute.post("/genre", isAuth(["admin", "user"]), createNewGenre);
+
+/**
+ * @swagger
+ * /api/v1/genre/{genreId}:
+ *   delete:
+ *     summary: Delete genre
+ *     description: Delete a genre by the id
+ *     tags:
+ *       - Genre
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: genreId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the genre to delete
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+genreRoute.delete("/genre/:id", isAuth(["admin", "user"]), deleteGenreById);
 
 export default genreRoute;
