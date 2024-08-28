@@ -1,4 +1,4 @@
-# Books Loans App with Express and MySql
+# Books Loans App with Express and PostgreSql
 This app was build for learning purpose
 
 ## Entity Relation Diagram
