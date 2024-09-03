@@ -125,13 +125,42 @@ const updateBookById = async (req, res) => {
         message: `book with id ${bookId} is not found`,
       });
     }
+
+    await prisma.bookGenre.deleteMany({
+      where: {
+        bookId: parseInt(bookId),
+      },
+    });
+
     const updatedBook = await prisma.book.update({
       where: {
         id: parseInt(bookId),
       },
-      data: req.body,
+      data: {
+        title: req.body.title,
+        isbn: req.body.isbn,
+        authorId: parseInt(req.body.authorId),
+        languageId: parseInt(req.body.languageId),
+        synopsys: req.body.synopsys,
+        stock: req.body.stock,
+      },
     });
-    return res.status(200).json({ data: updatedBook, message: "success" });
+
+    const bookGenres = req.body.genres;
+    for (const genreId of bookGenres) {
+      await prisma.bookGenre.create({
+        data: {
+          book: {
+            connect: { id: parseInt(bookId) },
+          },
+          genre: {
+            connect: { id: parseInt(genreId) },
+          },
+        },
+      });
+    }
+
+    return res.status(200).json({ message: "success", data: updatedBook });
   } catch (error) {
     return res.status(500).json({ message: error });
   }
