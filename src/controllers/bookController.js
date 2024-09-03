@@ -8,10 +8,10 @@ const getBookById = async (req, res) => {
       where: {
         id: parseInt(bookId),
       },
-      include:{
-        author:true,
-        language:true
-      }
+      include: {
+        author: true,
+        language: true,
+      },
     });
 
     if (!book) {
@@ -30,10 +30,10 @@ const getBookById = async (req, res) => {
 const getAllBook = async (req, res) => {
   try {
     const books = await prisma.book.findMany({
-        include:{
-            author:true,
-            language:true
-        }
+      include: {
+        author: true,
+        language: true,
+      },
     });
     return res.status(200).json({ data: books, message: "success" });
   } catch (error) {
@@ -53,6 +53,21 @@ const createNewBook = async (req, res) => {
         stock: 1,
       },
     });
+
+    const bookGenres = req.body.genres;
+    for (const genreId of bookGenres) {
+      await prisma.bookGenre.create({
+        data: {
+          book: {
+            connect: { id: book.id },
+          },
+          genre: {
+            connect: { id: parseInt(genreId) },
+          },
+        },
+      });
+    }
+
     return res.status(201).json({ data: book, message: "success" });
   } catch (error) {
     return res.status(500).json({ message: error });
