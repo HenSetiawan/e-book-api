@@ -11,6 +11,11 @@ const getBookById = async (req, res) => {
       include: {
         author: true,
         language: true,
+        genres:{
+          include:{
+            genre:true
+          }
+        },
       },
     });
 
@@ -33,6 +38,11 @@ const getAllBook = async (req, res) => {
       include: {
         author: true,
         language: true,
+        genres:{
+          include:{
+            genre:true
+          }
+        }
       },
     });
     return res.status(200).json({ data: books, message: "success" });
