@@ -86,4 +86,46 @@ const deleteLoanById = async (req, res) => {
   }
 };
 
-export { getLoanById, getAllLoan, getLoanByUserloggedIn, deleteLoanById };
+const createNewLoan = async (req, res) => {
+  const now = new Date();
+  const startDateUtc = new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      now.getUTCHours(),
+      now.getUTCMinutes(),
+      now.getUTCSeconds()
+    )
+  );
+
+  const futureDateTime = new Date(now);
+  futureDateTime.setDate(futureDateTime.getDate() + 7);
+  const endDateUtc = new Date(
+    Date.UTC(
+      futureDateTime.getUTCFullYear(),
+      futureDateTime.getUTCMonth(),
+      futureDateTime.getUTCDate(),
+      futureDateTime.getUTCHours(),
+      futureDateTime.getUTCMinutes(),
+      futureDateTime.getUTCSeconds()
+    )
+  );
+  try {
+    const loan = await prisma.loan.create({
+      data: {
+        bookId: parseInt(req.body.bookId),
+        userId: parseInt(req.body.userId),
+        status: "active",
+        startDate: startDateUtc,
+        endDate: endDateUtc,
+      },
+    });
+
+    return res.status(201).json({ data: loan, message: "success" });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+};
+
+export { getLoanById, getAllLoan, getLoanByUserloggedIn, deleteLoanById, createNewLoan };
