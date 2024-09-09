@@ -9,6 +9,7 @@ import authorRoute from "./author.js";
 import languageRoute from "./language.js";
 import bookRoute from "./book.js";
 import genreRoute from './genre.js';
+import loanRoute from './loan.js';
 
 apiRoute.use("/api/v1", userRoute);
 apiRoute.use("/api/v1", roleRoute);
@@ -18,5 +19,6 @@ apiRoute.use("/api/v1", authorRoute);
 apiRoute.use("/api/v1", languageRoute);
 apiRoute.use("/api/v1", bookRoute);
 apiRoute.use("/api/v1", genreRoute);
+apiRoute.use("/api/v1", loanRoute);
 
 export default apiRoute;
