@@ -29,11 +29,11 @@ const getLoanById = async (req, res) => {
 
 const getAllLoan = async (req, res) => {
   try {
-    const loans = await prisma.book.findMany({
-      include: {
-        book: true,
-        user: true,
-      },
+    const loans = await prisma.loan.findMany({
+        include:{
+            book:true,
+            user:true
+        }
     });
     return res.status(200).json({ data: loans, message: "success" });
   } catch (error) {
