@@ -137,12 +137,12 @@ const updateBookById = async (req, res) => {
         id: parseInt(bookId),
       },
       data: {
-        title: req.body.title,
-        isbn: req.body.isbn,
-        authorId: parseInt(req.body.authorId),
-        languageId: parseInt(req.body.languageId),
-        synopsys: req.body.synopsys,
-        stock: req.body.stock,
+        title: req.body.title || book.title,
+        isbn: req.body.isbn || book.isbn,
+        authorId: parseInt(req.body.authorId) || book.authorId,
+        languageId: parseInt(req.body.languageId) || book.languageId,
+        synopsys: req.body.synopsys || book.synopsys,
+        stock: req.body.stock || book.stock,
       },
     });
 
