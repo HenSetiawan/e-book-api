@@ -101,7 +101,7 @@ loanRoute.get("/loan", isAuth(["user"]), getLoanByUserloggedIn);
  *       500:
  *         description: Server error
  */
-loanRoute.delete("/loan:id", isAuth(["admin"]), deleteLoanById);
+loanRoute.delete("/loan/:id", isAuth(["admin"]), deleteLoanById);
 
 /**
  * @swagger

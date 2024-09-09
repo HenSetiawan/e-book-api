@@ -30,10 +30,10 @@ const getLoanById = async (req, res) => {
 const getAllLoan = async (req, res) => {
   try {
     const loans = await prisma.loan.findMany({
-        include:{
-            book:true,
-            user:true
-        }
+      include: {
+        book: true,
+        user: true,
+      },
     });
     return res.status(200).json({ data: loans, message: "success" });
   } catch (error) {
@@ -61,11 +61,7 @@ const deleteLoanById = async (req, res) => {
     const loan = await prisma.loan.findUnique({
       where: {
         id: parseInt(loanId),
-      },
-      include: {
-        book: true,
-        user: true,
-      },
+      }
     });
 
     if (!loan) {
@@ -87,6 +83,19 @@ const deleteLoanById = async (req, res) => {
 };
 
 const createNewLoan = async (req, res) => {
+  const book = await prisma.book.findUnique({
+    where: {
+      id: parseInt(req.body.bookId),
+    }
+  });
+
+  if (!book) {
+    return res.status(404).json({
+      data: book,
+      message: `book with id ${req.body.bookId} is not found`,
+    });
+  }
+
   const now = new Date();
   const startDateUtc = new Date(
     Date.UTC(
@@ -122,10 +131,25 @@ const createNewLoan = async (req, res) => {
       },
     });
 
+    const updatedBook = await prisma.book.update({
+      where: {
+        id: parseInt(req.body.bookId),
+      },
+      data: {
+        stock: parseInt(book.stock - 1),
+      },
+    });
+
     return res.status(201).json({ data: loan, message: "success" });
   } catch (error) {
     return res.status(500).json({ message: error });
   }
 };
 
-export { getLoanById, getAllLoan, getLoanByUserloggedIn, deleteLoanById, createNewLoan };
+export {
+  getLoanById,
+  getAllLoan,
+  getLoanByUserloggedIn,
+  deleteLoanById,
+  createNewLoan,
+};
