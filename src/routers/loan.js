@@ -1,7 +1,7 @@
 import express from "express";
 const loanRoute = express.Router();
 import isAuth from "../middleware/isAuth.js";
-import { getLoanById } from "../controllers/loanController.js";
+import { getLoanById, getAllLoan } from "../controllers/loanController.js";
 
 /**
  * @swagger
@@ -30,5 +30,24 @@ import { getLoanById } from "../controllers/loanController.js";
  */
 loanRoute.get("/loan/:id", isAuth(["admin", "user"]), getLoanById);
 
+/**
+ * @swagger
+ * /api/v1/loans:
+ *   get:
+ *     summary: Retrieve all loan data
+ *     description: Retrieve all the data loan from database
+ *     tags:
+ *       - Loan
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+loanRoute.get("/loans", isAuth(["admin"]), getAllLoan);
 
 export default loanRoute;
