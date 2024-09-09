@@ -55,4 +55,35 @@ const getLoanByUserloggedIn = async (req, res) => {
   }
 };
 
-export { getLoanById, getAllLoan, getLoanByUserloggedIn };
+const deleteLoanById = async (req, res) => {
+  const loanId = req.params.id;
+  try {
+    const loan = await prisma.loan.findUnique({
+      where: {
+        id: parseInt(loanId),
+      },
+      include: {
+        book: true,
+        user: true,
+      },
+    });
+
+    if (!loan) {
+      return res.status(404).json({
+        data: loan,
+        message: `loan with id ${loanId} is not found`,
+      });
+    } else {
+      const deletedLoan = await prisma.loan.delete({
+        where: {
+          id: parseInt(loanId),
+        },
+      });
+      return res.status(200).json({ data: deletedLoan, message: `success` });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+};
+
+export { getLoanById, getAllLoan, getLoanByUserloggedIn, deleteLoanById };

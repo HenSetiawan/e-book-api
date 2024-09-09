@@ -5,6 +5,7 @@ import {
   getLoanById,
   getAllLoan,
   getLoanByUserloggedIn,
+  deleteLoanById,
 } from "../controllers/loanController.js";
 
 /**
@@ -73,5 +74,32 @@ loanRoute.get("/loans", isAuth(["admin"]), getAllLoan);
  *         description: Server error
  */
 loanRoute.get("/loan", isAuth(["user"]), getLoanByUserloggedIn);
+
+/**
+ * @swagger
+ * /api/v1/loan/{loanId}:
+ *   delete:
+ *     summary: Delete loan
+ *     description: Delete a loan by the id
+ *     tags:
+ *       - Loan
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: loanId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the loan to delete
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+loanRoute.delete("/loan:id", isAuth(["admin"]), deleteLoanById);
 
 export default loanRoute;
