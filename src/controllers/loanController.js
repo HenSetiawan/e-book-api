@@ -28,17 +28,31 @@ const getLoanById = async (req, res) => {
 };
 
 const getAllLoan = async (req, res) => {
-    try {
-      const loans = await prisma.book.findMany({
-        include: {
-          book: true,
-          user: true,
-        },
-      });
-      return res.status(200).json({ data: loans, message: "success" });
-    } catch (error) {
-      return res.status(500).json({ message: error });
-    }
-  };
+  try {
+    const loans = await prisma.book.findMany({
+      include: {
+        book: true,
+        user: true,
+      },
+    });
+    return res.status(200).json({ data: loans, message: "success" });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+};
 
-export { getLoanById, getAllLoan };
+const getLoanByUserloggedIn = async (req, res) => {
+  const userId = req.data.userData.id;
+  try {
+    const loan = await prisma.loan.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+    return res.status(200).json({ data: loan, message: `success` });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+};
+
+export { getLoanById, getAllLoan, getLoanByUserloggedIn };
