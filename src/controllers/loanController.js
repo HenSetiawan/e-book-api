@@ -61,7 +61,7 @@ const deleteLoanById = async (req, res) => {
     const loan = await prisma.loan.findUnique({
       where: {
         id: parseInt(loanId),
-      }
+      },
     });
 
     if (!loan) {
@@ -83,16 +83,33 @@ const deleteLoanById = async (req, res) => {
 };
 
 const createNewLoan = async (req, res) => {
-  const book = await prisma.book.findUnique({
+  const book = await prisma.book.findFirst({
     where: {
       id: parseInt(req.body.bookId),
-    }
+      stock: {
+        gt: 0,
+      },
+    },
   });
 
   if (!book) {
     return res.status(404).json({
       data: book,
       message: `book with id ${req.body.bookId} is not found`,
+    });
+  }
+
+  const activeLoans = await prisma.loan.findMany({
+    where: {
+      userId: parseInt(req.body.userId),
+      status: "active",
+    },
+  });
+
+  if (activeLoans > 1) {
+    return res.status(400).json({
+      data: activeLoans,
+      message: `user already have 2 book loaned`,
     });
   }
 
@@ -120,25 +137,45 @@ const createNewLoan = async (req, res) => {
       futureDateTime.getUTCSeconds()
     )
   );
-  try {
-    const loan = await prisma.loan.create({
-      data: {
-        bookId: parseInt(req.body.bookId),
-        userId: parseInt(req.body.userId),
-        status: "active",
-        startDate: startDateUtc,
-        endDate: endDateUtc,
-      },
-    });
 
-    const updatedBook = await prisma.book.update({
-      where: {
-        id: parseInt(req.body.bookId),
+  const userPenalties = await prisma.penalty.findFirst({
+    where: {
+      userId: parseInt(req.body.id),
+      endDate: {
+        gt: startDateUtc,
       },
-      data: {
-        stock: parseInt(book.stock - 1),
-      },
+    },
+  });
+
+  if (userPenalties) {
+    return res.status(400).json({
+      data: userPenalties,
+      message: `user have active pinalty`,
     });
+  }
+
+  try {
+    const [loan, updatedBook] = await prisma.$transaction([
+      prisma.loan.create({
+        data: {
+          bookId: parseInt(req.body.bookId),
+          userId: parseInt(req.body.userId),
+          status: "active",
+          startDate: startDateUtc,
+          endDate: endDateUtc,
+        },
+      }),
+      prisma.book.update({
+        where: {
+          id: parseInt(req.body.bookId),
+        },
+        data: {
+          stock: {
+            decrement: 1,
+          },
+        },
+      }),
+    ]);
 
     return res.status(201).json({ data: loan, message: "success" });
   } catch (error) {
