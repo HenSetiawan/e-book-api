@@ -106,7 +106,7 @@ const createNewLoan = async (req, res) => {
     },
   });
 
-  if (activeLoans > 1) {
+  if (activeLoans.length > 1) {
     return res.status(400).json({
       data: activeLoans,
       message: `user already have 2 book loaned`,
@@ -140,7 +140,7 @@ const createNewLoan = async (req, res) => {
 
   const userPenalties = await prisma.penalty.findFirst({
     where: {
-      userId: parseInt(req.body.id),
+      userId: parseInt(req.body.userId),
       endDate: {
         gt: startDateUtc,
       },

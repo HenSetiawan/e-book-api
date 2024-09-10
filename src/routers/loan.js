@@ -136,6 +136,6 @@ loanRoute.delete("/loan/:id", isAuth(["admin"]), deleteLoanById);
  *       500:
  *         description: Server error
  */
-loanRoute.post("/loan", isAuth(["user", "admin"]), createNewLoan);
+loanRoute.post("/loan", isAuth(["user"]), createNewLoan);
 
 export default loanRoute;
