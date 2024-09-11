@@ -83,6 +83,7 @@ const deleteLoanById = async (req, res) => {
 };
 
 const createNewLoan = async (req, res) => {
+  // check is the book is available
   const book = await prisma.book.findFirst({
     where: {
       id: parseInt(req.body.bookId),
@@ -99,6 +100,7 @@ const createNewLoan = async (req, res) => {
     });
   }
 
+  // check if the user already have book loan more than 1
   const activeLoans = await prisma.loan.findMany({
     where: {
       userId: parseInt(req.body.userId),
@@ -138,6 +140,7 @@ const createNewLoan = async (req, res) => {
     )
   );
 
+  // check if user have penalty
   const userPenalties = await prisma.penalty.findFirst({
     where: {
       userId: parseInt(req.body.userId),
@@ -155,6 +158,7 @@ const createNewLoan = async (req, res) => {
   }
 
   try {
+    // create new loan and update book stock
     const [loan, updatedBook] = await prisma.$transaction([
       prisma.loan.create({
         data: {
