@@ -84,6 +84,7 @@ const deleteLoanById = async (req, res) => {
 
 const createNewLoan = async (req, res) => {
   // check is the book is available
+  const userId = req.data.userData.id;
   const book = await prisma.book.findFirst({
     where: {
       id: parseInt(req.body.bookId),
@@ -103,7 +104,7 @@ const createNewLoan = async (req, res) => {
   // check if the user already have book loan more than 1
   const activeLoans = await prisma.loan.findMany({
     where: {
-      userId: parseInt(req.body.userId),
+      userId: parseInt(userId),
       status: "active",
     },
   });
@@ -143,7 +144,7 @@ const createNewLoan = async (req, res) => {
   // check if user have penalty
   const userPenalties = await prisma.penalty.findFirst({
     where: {
-      userId: parseInt(req.body.userId),
+      userId: parseInt(userId),
       endDate: {
         gt: startDateUtc,
       },
@@ -163,7 +164,7 @@ const createNewLoan = async (req, res) => {
       prisma.loan.create({
         data: {
           bookId: parseInt(req.body.bookId),
-          userId: parseInt(req.body.userId),
+          userId: parseInt(userId),
           status: "active",
           startDate: startDateUtc,
           endDate: endDateUtc,
@@ -186,6 +187,15 @@ const createNewLoan = async (req, res) => {
     return res.status(500).json({ message: error });
   }
 };
+
+const returnLoanedBook = async (req, res)=>{
+  // check if the date is valid or give pinalty
+
+  // update loan status to inactive
+
+
+  // update book stock
+}
 
 export {
   getLoanById,
