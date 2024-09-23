@@ -120,10 +120,6 @@ loanRoute.delete("/loan/:id", isAuth(["admin"]), deleteLoanById);
  *           schema:
  *             type: object
  *             properties:
- *               userId:
- *                 type: integer
- *                 description: user id who loan the book
- *                 example: 1
  *               bookId:
  *                 type: integer
  *                 description: the book id

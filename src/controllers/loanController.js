@@ -188,14 +188,79 @@ const createNewLoan = async (req, res) => {
   }
 };
 
-const returnLoanedBook = async (req, res)=>{
-  // check if the date is valid or give pinalty
+const returnLoanedBook = async (req, res) => {
+  const bookId = req.body.bookId;
+  const userId = req.data.userData.id;
 
-  // update loan status to inactive
+  try {
+    // Mulai transaksi
+    await prisma.$transaction(async (prisma) => {
+      // Ambil data pinjaman berdasarkan bookId dan userId
+      const loanedData = await prisma.loan.findFirst({
+        where: {
+          bookId: parseInt(bookId),
+          userId: parseInt(userId),
+        },
+      });
 
+      if (!loanedData) {
+        throw new Error("Loan is not found");
+      }
 
-  // update book stock
-}
+      // Periksa apakah tanggal akhir lebih dari hari ini, jika iya berikan penalti
+      const endDate = new Date(loanedData.endDate);
+      const today = new Date();
+
+      if (endDate > today) {
+        const penaltyEndDate = new Date(today);
+        penaltyEndDate.setDate(today.getDate() + 7);
+
+        // Tambahkan penalti
+        await prisma.penalty.create({
+          data: {
+            userId: loanedData.userId,
+            loanId: loanedData.id,
+            startDate: today,
+            endDate: penaltyEndDate,
+          },
+        });
+      }
+
+      // Update status loan menjadi "inactive"
+      await prisma.loan.update({
+        where: {
+          id: loanedData.id, // Gunakan "id" bukan "loanId"
+        },
+        data: {
+          status: "inactive",
+        },
+      });
+
+      // Update stok buku
+      await prisma.book.update({
+        where: {
+          id: parseInt(req.body.bookId),
+        },
+        data: {
+          stock: {
+            increment: 1,
+          },
+        },
+      });
+    });
+
+    // Jika transaksi berhasil, kirim respons sukses
+    res.status(200).json({
+      message: 'Loan returned successfully, stock updated.',
+    });
+  } catch (error) {
+    // Jika ada error, kirimkan respons error
+    res.status(500).json({
+      message: error.message || 'Something went wrong with the transaction.',
+    });
+  }
+};
+
 
 export {
   getLoanById,
@@ -203,4 +268,5 @@ export {
   getLoanByUserloggedIn,
   deleteLoanById,
   createNewLoan,
+  returnLoanedBook
 };
