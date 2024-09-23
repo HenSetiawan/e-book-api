@@ -7,6 +7,7 @@ import {
   getLoanByUserloggedIn,
   deleteLoanById,
   createNewLoan,
+  returnLoanedBook
 } from "../controllers/loanController.js";
 
 /**
@@ -133,5 +134,32 @@ loanRoute.delete("/loan/:id", isAuth(["admin"]), deleteLoanById);
  *         description: Server error
  */
 loanRoute.post("/loan", isAuth(["user"]), createNewLoan);
+
+/**
+ * @swagger
+ * /api/v1/return/{bookId}:
+ *   post:
+ *     summary: return book
+ *     description: return book by book id and user id
+ *     tags:
+ *       - Loan
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: loanId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the loan to delete
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Server error
+ */
+loanRoute.delete("/return/:bookId", isAuth(["user",'admin']), returnLoanedBook);
 
 export default loanRoute;

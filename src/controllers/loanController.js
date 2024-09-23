@@ -189,7 +189,7 @@ const createNewLoan = async (req, res) => {
 };
 
 const returnLoanedBook = async (req, res) => {
-  const bookId = req.body.bookId;
+  const bookId = req.params.bookId;
   const userId = req.data.userData.id;
 
   try {
