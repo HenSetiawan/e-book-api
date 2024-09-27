@@ -101,6 +101,22 @@ const createNewLoan = async (req, res) => {
     });
   }
 
+  // check if user already loan the same book
+  const userLoan = await prisma.loan.findFirst({
+    where: {
+      userId: userId,
+      bookId: req.body.bookId,
+      status:'active'
+    },
+  });
+
+  if (userLoan) {
+    return res.status(400).json({
+      data: userLoan,
+      message: `user already loan the book`,
+    });
+  }
+
   // check if the user already have book loan more than 1
   const activeLoans = await prisma.loan.findMany({
     where: {
@@ -200,6 +216,7 @@ const returnLoanedBook = async (req, res) => {
         where: {
           bookId: parseInt(bookId),
           userId: parseInt(userId),
+          status:'active'
         },
       });
 
@@ -251,16 +268,15 @@ const returnLoanedBook = async (req, res) => {
 
     // Jika transaksi berhasil, kirim respons sukses
     res.status(200).json({
-      message: 'Loan returned successfully, stock updated.',
+      message: "Loan returned successfully, stock updated.",
     });
   } catch (error) {
     // Jika ada error, kirimkan respons error
     res.status(500).json({
-      message: error.message || 'Something went wrong with the transaction.',
+      message: error.message || "Something went wrong with the transaction.",
     });
   }
 };
-
 
 export {
   getLoanById,
@@ -268,5 +284,5 @@ export {
   getLoanByUserloggedIn,
   deleteLoanById,
   createNewLoan,
-  returnLoanedBook
+  returnLoanedBook,
 };
