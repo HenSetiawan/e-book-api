@@ -239,7 +239,7 @@ const returnLoanedBook = async (req, res) => {
       // Update stok buku
       await prisma.book.update({
         where: {
-          id: parseInt(req.body.bookId),
+          id: parseInt(bookId),
         },
         data: {
           stock: {

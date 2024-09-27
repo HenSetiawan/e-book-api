@@ -75,7 +75,7 @@ loanRoute.get("/loans", isAuth(["admin"]), getAllLoan);
  *       500:
  *         description: Server error
  */
-loanRoute.get("/loan", isAuth(["user"]), getLoanByUserloggedIn);
+loanRoute.get("/loan", isAuth(["user",'admin']), getLoanByUserloggedIn);
 
 /**
  * @swagger
@@ -133,7 +133,7 @@ loanRoute.delete("/loan/:id", isAuth(["admin"]), deleteLoanById);
  *       500:
  *         description: Server error
  */
-loanRoute.post("/loan", isAuth(["user"]), createNewLoan);
+loanRoute.post("/loan", isAuth(["user",'admin']), createNewLoan);
 
 /**
  * @swagger
@@ -147,11 +147,11 @@ loanRoute.post("/loan", isAuth(["user"]), createNewLoan);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: loanId
+ *         name: bookId
  *         required: true
  *         schema:
  *           type: integer
- *         description: The ID of the loan to delete
+ *         description: The ID of the book to return
  *     responses:
  *       200:
  *         description: OK
@@ -160,6 +160,6 @@ loanRoute.post("/loan", isAuth(["user"]), createNewLoan);
  *       500:
  *         description: Server error
  */
-loanRoute.delete("/return/:bookId", isAuth(["user",'admin']), returnLoanedBook);
+loanRoute.post("/return/:bookId", isAuth(["user",'admin']), returnLoanedBook);
 
 export default loanRoute;
